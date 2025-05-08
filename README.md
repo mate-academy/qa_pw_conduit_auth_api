@@ -31,14 +31,10 @@ In this task you need to create test cases for the [Conduit](https://conduit.mat
 2. Create test for the `Update user` operation.
 - *Update user with empty auth token*
 - *Update not existing user*
-3. Сreate positive and negative tests for the `Follow user` and `Unfollow user` Profile operations. 
-- *Follow existing user prorfile*
-- *Follow not existing user profile*
-- *Follow existing user with empty auth token*
-- *Unollow existing user prorfile*
-- *Unollow not existing user profile*
-- *Uollow existing user with empty auth token*
-4. Use the already created tests as examples.
+3. Create test for the `Profile` operatons:
+- *Read profile of not existing user*
+- *Read profile of existing user with empty auth header*
+3. Use the already created tests as examples.
 
 ## Task Reporting
 
