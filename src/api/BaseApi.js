@@ -1,0 +1,63 @@
+import { expect } from '@playwright/test';
+import { testStep } from '../common/helpers/pw';
+import { SUCCESS_CODE, UNPROCESSABLE_ENTITY } from '../constants/responceCodes';
+
+export class BaseAPI {
+  _endpoint;
+  _headers;
+
+  constructor(request) {
+    this.request = request;
+  }
+
+  async step(title, stepToRun) {
+    return await testStep(title, stepToRun);
+  }
+
+  parseStatus(response) {
+    return response.status();
+  }
+
+  async parseBody(response) {
+    return await response.json();
+  }
+
+  async parseIdFromBody(response) {
+    const body = await this.parseBody(response);
+
+    return body.id;
+  }
+
+  async assertResponseCode(response, code) {
+    await this.step(`Assert the code ${code} is returned`, async () => {
+      expect(this.parseStatus(response)).toEqual(code);
+    });
+  }
+
+  async assertSuccessResponseCode(response) {
+    await this.assertResponseCode(response, SUCCESS_CODE);
+  }
+
+  async assertUnprocessableEntityResponseCode(response) {
+    await this.assertResponseCode(response, UNPROCESSABLE_ENTITY);
+  }
+
+  async assertBodyIsNotEmpty(response) {
+    await this.step(`Assert response body is not empty`, async () => {
+      const body = await this.parseBody(response);
+
+      expect(body).not.toBe([]);
+    });
+  }
+
+  async assertErrorMessageInResponseBody(response, message) {
+    await this.step(
+      `Assert response body contains error message ${message}`,
+      async () => {
+        const body = await this.parseBody(response);
+
+        expect(toString(body.errors)).not.toBe(message);
+      },
+    );
+  }
+}
