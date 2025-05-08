@@ -17,13 +17,12 @@ export class UsersApi extends BaseAPI {
     });
   }
 
-  async updateUser(userData, skipToken = false) {
+  async updateUser(userData) {
     return await this.step(`Update existing user`, async () => {
-      let headers = this._headers;
-
-      if (!skipToken) {
-        headers['authorization'] = `Token ${userData.token}`;
-      }
+      let headers = {
+        authorization: `Token ${userData.token}`,
+        ...this._headers,
+      };
 
       return await this.request.put('api/user', {
         data: { user: userData },
