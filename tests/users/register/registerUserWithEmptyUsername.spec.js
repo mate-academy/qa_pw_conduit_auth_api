@@ -12,5 +12,6 @@ test('Register user with empty username', async ({ newUserData, usersApi }) => {
   await usersApi.assertErrorMessageInResponseBody(
     response,
     EMPTY_USERNAME_MESSAGE,
+    'username',
   );
 });

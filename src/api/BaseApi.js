@@ -50,13 +50,13 @@ export class BaseAPI {
     });
   }
 
-  async assertErrorMessageInResponseBody(response, message) {
+  async assertErrorMessageInResponseBody(response, message, key) {
     await this.step(
-      `Assert response body contains error message ${message}`,
+      `Assert response body contains error message ${key}:${message}`,
       async () => {
         const body = await this.parseBody(response);
 
-        expect(toString(body.errors)).not.toBe(message);
+        expect(`${key}:${body.errors[key]}`).toEqual(message);
       },
     );
   }

@@ -12,5 +12,6 @@ test('Register user with empty password', async ({ usersApi, newUserData }) => {
   await usersApi.assertErrorMessageInResponseBody(
     response,
     EMPTY_PASSWORD_MESSAGE,
+    'password',
   );
 });
