@@ -28,15 +28,16 @@ In this task you need to create test cases for the [Conduit](https://conduit.mat
 - *Login with not existing email*
 - *Login with wrong formatted email*
 - *Login with wrong password*
-2. Create negative test for the `Update user` operation.
-- *Update user without authorization header provided*
+2. Create test for the `Update user` operation.
+- *Update user with empty auth token*
+- *Update not existing user*
 3. Сreate positive and negative tests for the `Follow user` and `Unfollow user` Profile operations. 
 - *Follow existing user prorfile*
 - *Follow not existing user profile*
-- *Follow existing user with missing auth header*
+- *Follow existing user with empty auth token*
 - *Unollow existing user prorfile*
 - *Unollow not existing user profile*
-- *Uollow existing user with missing auth header*
+- *Uollow existing user with empty auth token*
 4. Use the already created tests as examples.
 
 ## Task Reporting
