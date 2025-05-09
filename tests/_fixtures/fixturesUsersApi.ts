@@ -18,11 +18,6 @@ export const test = base.extend<{
 
     await use(userData);
   },
-  updateUserData: async ({ logger }, use) => {
-    const userData = generateNewUserData(logger);
-
-    await use(userData);
-  },
   registeredUser: async ({ usersApi, newUserData }, use) => {
     const response = await usersApi.registerNewUser(newUserData);
 
