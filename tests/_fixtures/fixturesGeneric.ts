@@ -4,11 +4,17 @@ import { generateNewUserData } from '../../src/common/testData/generateNewUserDa
 import * as allure from 'allure-js-commons';
 import { parseTestTreeHierarchy } from '../../src/common/helpers/allureHelpers';
 
-export const test = base.extend<{
-  logger;
-  infoTestLog;
-  addAllureTestHierarchy;
-}>({
+export const test = base.extend<
+  {
+    usersNumber;
+    contextsNumber;
+    infoTestLog;
+    addAllureTestHierarchy;
+  },
+  {
+    logger;
+  }
+>({
   logger: [
     async ({}, use) => {
       const logger = new Logger('error');
