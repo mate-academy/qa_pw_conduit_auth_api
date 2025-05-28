@@ -1,4 +1,5 @@
 import { INVALID_EMAIL_OR_PASSWORD_MESSAGE } from '../../../src/constants/authErrorMessages';
+import { UNPROCESSABLE_ENTITY } from '../../../src/constants/responceCodes';
 import { test } from '../../_fixtures/fixtures';
 
 const wrongFormattedEmail = 'test_yuriyemail.com';
@@ -10,7 +11,7 @@ test('login with wrong formatted email', async ({ usersApi }) => {
     validPassword,
   );
 
-  await usersApi.assertResponseCode(response, 422);
+  await usersApi.assertResponseCode(response, UNPROCESSABLE_ENTITY);
   await usersApi.assertErrorMessageInResponseBody(
     response,
     INVALID_EMAIL_OR_PASSWORD_MESSAGE,
