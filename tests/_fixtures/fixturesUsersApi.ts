@@ -3,7 +3,7 @@ import { UsersApi } from '../../src/api/endpoints/UsersApi';
 import { generateNewUserData } from '../../src/common/testData/generateNewUserData';
 
 export const test = base.extend<{
-  usersApi;
+  usersApi: UsersApi;
   newUserData;
   updateUserData;
   registeredUser;
