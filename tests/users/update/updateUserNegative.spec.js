@@ -11,7 +11,7 @@ test('Update user with empty auth token', async ({
     token: '',
   };
 
-  const response = await usersApi.updatedUser(updatedData);
+  const response = await usersApi.updateUser(updatedData);
   expect(response.status()).toBe(401);
 });
 
@@ -24,6 +24,6 @@ test('Updated not exsting user', async ({ usersApi }) => {
     token: 'token',
   };
 
-  const response = await usersApi.updatedUser(fakeUser);
+  const response = await usersApi.updateUser(fakeUser);
   expect(response.status()).toBe(401);
 });

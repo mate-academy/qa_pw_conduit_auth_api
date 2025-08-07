@@ -1,4 +1,6 @@
+import { expect } from 'allure-playwright';
 import { test } from '../../_fixtures/fixtures';
+import { SUCCESS_CODE } from '../../../src/constants/responceCodes';
 
 test('Successful login for previously registered user', async ({
   usersApi,
@@ -11,7 +13,7 @@ test('Successful login for previously registered user', async ({
 
   const response = await usersApi.loginUser(credentials);
 
-  await usersApi.assertSuccessResponseCode(response);
+  expect(response.status()).toBe(SUCCESS_CODE);
   await usersApi.assertResponseBodyContainsToken(response);
   await usersApi.assertEmailHasCorrectValue(response, registeredUser.email);
 });

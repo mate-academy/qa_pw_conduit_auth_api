@@ -1,6 +1,8 @@
 import { test, expect } from '../../_fixtures/fixtures';
-import { NOT_FOUND_CODE } from '../../../src/api/constants/responceCodes';
-import { SUCCESS_CODE } from '../../../src/constants/responceCodes';
+import {
+  NOT_FOUND_CODE,
+  SUCCESS_CODE,
+} from '../../../src/constants/responceCodes';
 
 test('Read profile of not existing user', async ({
   profilesApi,
