@@ -79,4 +79,13 @@ export class UsersApi extends BaseAPI {
       expect(body.user.bio).toBe(bio);
     });
   }
+
+  async loginUser(credentials) {
+    return await this.step('Login user', async () => {
+      return await this.request.post('/api/users/login', {
+        data: { user: credentials },
+        headers: this._headers,
+      });
+    });
+  }
 }
