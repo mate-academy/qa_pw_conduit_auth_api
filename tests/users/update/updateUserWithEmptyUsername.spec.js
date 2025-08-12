@@ -1,7 +1,6 @@
 import { test } from '../../_fixtures/fixtures';
-import { expect } from 'allure-playwright';
 
-test(`Update not existing user`, async ({ registeredUser, usersApi }) => {
+test(`Update user with empty username`, async ({ registeredUser, usersApi }) => {
   registeredUser['username'] = '';
 
   const response = await usersApi.updateUser(registeredUser);
