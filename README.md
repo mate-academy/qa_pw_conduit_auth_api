@@ -23,7 +23,7 @@ In this task you need to create test cases for the [Conduit](https://conduit.mat
 
 ## Main Task
 
-1. Create positive and negative tests for the `Login user` operation. 
+1. Create positive and negative tests for the `Login user` operation.
 - *Successfull login for the previosuly regsitered user*
 - *Login with not existing email*
 - *Login with wrong formatted email*

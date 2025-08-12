@@ -17,6 +17,15 @@ export class UsersApi extends BaseAPI {
     });
   }
 
+  async login(credentials) {
+    return await this.step(`Login existing user`, async () => {
+      return await this.request.post(`${this._endpoint}/login`, {
+        data: { user: credentials },
+        headers: this._headers,
+      });
+    });
+  }
+
   async updateUser(userData) {
     return await this.step(`Update existing user`, async () => {
       let headers = {
@@ -35,6 +44,13 @@ export class UsersApi extends BaseAPI {
     const body = await this.parseBody(response);
 
     return body.user.token;
+  }
+
+  async assertResponseBodyContainsPlainText(response, expectedText) {
+    await this.step(`Assert response body contains plain text: ${expectedText}`, async () => {
+      const bodyText = await response.text();
+      expect(bodyText.trim()).toBe(expectedText);
+    });
   }
 
   async assertResponseBodyContainsToken(response) {
