@@ -5,6 +5,6 @@ test('Login with wrong password', async ({ registeredUser, usersApi }) => {
 
   const wrongPassword = `${password}_wrong`;
 
-  const loginResponse = await usersApi.login({ email: wrongPassword, password });
+  const loginResponse = await usersApi.login({ wrongPassword });
   await usersApi.assertUnprocessableEntityResponseCode(loginResponse);
 });
