@@ -1,7 +1,6 @@
 import { test } from '../../_fixtures/fixtures';
-import { NOT_FOUND_TEXT } from '../../../src/constants/authErrorMessages';
 
-test(`Read profile of existing user with emty auth`, async ({
+test(`Read profile of existing user with emty auth (responce will be 200 OK)`, async ({
   profilesApi,
   registeredUser,
 }) => {
