@@ -17,6 +17,15 @@ export class UsersApi extends BaseAPI {
     });
   }
 
+  async logInUser(userData) {
+    return await this.step(`Log in as an existing user`, async () => {
+      return await this.request.post(this._endpoint + '/login', {
+        data: { user: userData },
+        headers: this._headers,
+      });
+    });
+  }
+
   async updateUser(userData) {
     return await this.step(`Update existing user`, async () => {
       let headers = {
@@ -24,7 +33,7 @@ export class UsersApi extends BaseAPI {
         ...this._headers,
       };
 
-      return await this.request.put('api/user', {
+      return await this.request.put('/api/user', {
         data: { user: userData },
         headers,
       });
