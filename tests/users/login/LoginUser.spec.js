@@ -3,7 +3,9 @@ import {
   WRONG_FORMATED_EMAIL,
   EXISTING_EMAIL
 } from '../../../src/constants/emails';
-
+import {
+  generateNewUserData
+} from '../../../src/common/testData/generateNewUserData';
 
 test.describe('Different users login flows', () => {
 
@@ -22,8 +24,11 @@ test.describe('Different users login flows', () => {
   test(
     'Login with not existing email',
     async ({ registeredUser, usersApi }) => {
-      registeredUser['email'] = EXISTING_EMAIL;
+      const newUser = generateNewUserData();
+      await usersApi.loginUser(newUser);
 
+
+      registeredUser['email'] = newUser.email;
       const response = await usersApi.loginUser(registeredUser);
 
       await usersApi.assertUnprocessableEntityResponseCode(response);
