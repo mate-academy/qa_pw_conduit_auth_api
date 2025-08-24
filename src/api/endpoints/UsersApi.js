@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test';
 import { BaseAPI } from '../BaseApi';
 
+
 export class UsersApi extends BaseAPI {
   constructor(request) {
     super(request);
@@ -17,14 +18,27 @@ export class UsersApi extends BaseAPI {
     });
   }
 
+  async loginUser(userData) {
+    return await this.step(`Login ${userData.username} user.`, async () => {
+      return await this.request.post(this._endpoint + '/login', {
+        data: {
+          user: {
+            email: userData.email,
+            password: userData.password,
+          }
+        },
+        headers: this._headers,
+      })
+    });
+  }
+
   async updateUser(userData) {
     return await this.step(`Update existing user`, async () => {
       let headers = {
         authorization: `Token ${userData.token}`,
         ...this._headers,
       };
-
-      return await this.request.put('api/user', {
+      return await this.request.put('/api/user', {
         data: { user: userData },
         headers,
       });
