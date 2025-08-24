@@ -7,8 +7,11 @@ test.describe('Different read user flows', () => {
   test(
     `Read profile of not existing user`,
     async ({ registeredUser, profilesApi }) => {
-      registeredUser['username'] = 'not_existing_user_name';
-      const response = await profilesApi.getProfile(profilesApi);
+      const notExistingUsername = 'not_existing_user_name';
+      const response = await profilesApi.getProfile(
+        notExistingUsername,
+        registeredUser.token
+      );
       await profilesApi.assertResponseCode(response, NOT_FOUND);
   });
 
