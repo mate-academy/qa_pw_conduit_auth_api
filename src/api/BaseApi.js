@@ -1,6 +1,11 @@
 import { expect } from '@playwright/test';
 import { testStep } from '../common/helpers/pw';
-import { SUCCESS_CODE, UNPROCESSABLE_ENTITY } from '../constants/responceCodes';
+import {
+  SUCCESS_CODE,
+  UNPROCESSABLE_ENTITY,
+  UNAUTHORIZED,
+  NOT_FOUND,
+} from '../constants/responceCodes';
 
 export class BaseAPI {
   _endpoint;
@@ -18,6 +23,10 @@ export class BaseAPI {
     return response.status();
   }
 
+  parseText(response) {
+    return response.text();
+  }
+
   async parseBody(response) {
     return await response.json();
   }
@@ -28,6 +37,13 @@ export class BaseAPI {
     return body.id;
   }
 
+  async assertText(response, text) {
+    await this.step(`Assert response text contains "${text}"`, async () => {
+      const body = await this.parseText(response);
+      expect(body).toContain(text);
+    });
+  }
+
   async assertResponseCode(response, code) {
     await this.step(`Assert the code ${code} is returned`, async () => {
       expect(this.parseStatus(response)).toEqual(code);
@@ -36,6 +52,14 @@ export class BaseAPI {
 
   async assertSuccessResponseCode(response) {
     await this.assertResponseCode(response, SUCCESS_CODE);
+  }
+
+  async assertUnauthorizedResponseCode(response) {
+    await this.assertResponseCode(response, UNAUTHORIZED);
+  }
+
+  async assertNotFoundResponseCode(response) {
+    await this.assertResponseCode(response, NOT_FOUND);
   }
 
   async assertUnprocessableEntityResponseCode(response) {
@@ -50,13 +74,20 @@ export class BaseAPI {
     });
   }
 
-  async assertErrorMessageInResponseBody(response, message, key) {
+  async assertErrorMessageInResponseBody(response, message) {
     await this.step(
-      `Assert response body contains error message ${key}:${message}`,
+      `Assert response body contains error message "${message}"`,
       async () => {
         const body = await this.parseBody(response);
+        const [key, expectedError] = message.split(':');
 
-        expect(`${key}:${body.errors[key]}`).toEqual(message);
+        const actualError = body.errors[key.trim()];
+
+        const errorMessage = Array.isArray(actualError)
+          ? actualError[0]
+          : actualError;
+
+        expect(errorMessage).toBe(expectedError.trim());
       },
     );
   }

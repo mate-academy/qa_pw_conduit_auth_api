@@ -33,7 +33,7 @@ In this task you need to create test cases for the [Conduit](https://conduit.mat
 - *Update not existing user*
 3. Create test for the `Profile` operatons:
 - *Read profile of not existing user*
-- *Read profile of existing user with empty auth header*
+- *Read profile of existing user with empty auth header but with 200 responce*
 3. Use the already created tests as examples.
 
 ## Task Reporting
