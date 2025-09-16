@@ -1,42 +1,26 @@
-// tests/auth/login.spec.js
 import { test } from '../../_fixtures/fixtures.js';
-import { INVALID_EMAIL_MESSAGE } from '../../../src/constants/authErrorMessages.js';
 
 test('Successful login for previously registered user', async ({ usersApi, registeredUser }) => {
-  const response = await usersApi.loginUser({
-    email: registeredUser.email,
-    password: registeredUser.password,
-  });
-
-  await usersApi.assertSuccessResponseCode(response);
-  await usersApi.assertEmailHasCorrectValue(response, registeredUser.email);
-  await usersApi.assertUsernameHasCorrectValue(response, registeredUser.username);
-  await usersApi.assertResponseBodyContainsToken(response);
+  const res = await usersApi.loginUser({ email: registeredUser.email, password: registeredUser.password });
+  await usersApi.assertSuccessResponseCode(res);
+  await usersApi.assertEmailHasCorrectValue(res, registeredUser.email);
+  await usersApi.assertUsernameHasCorrectValue(res, registeredUser.username);
+  await usersApi.assertResponseBodyContainsToken(res);
 });
 
-test('Login with not existing email', async ({ usersApi, newUserData }) => {
-  const response = await usersApi.loginUser({
-    email: `no_${newUserData.email}`,
-    password: newUserData.password,
+test.describe('Login – negative scenarios (same response for all)', () => {
+  test('non-existing email', async ({ usersApi, newUserData }) => {
+    const res = await usersApi.loginUser({ email: `no_${newUserData.email}`, password: newUserData.password });
+    await usersApi.assertInvalidCredentials(res); // 422 + "...invalid..."
   });
 
-  await usersApi.assertInvalidCredentials(response);
-});
-
-test('Login with wrong password', async ({ usersApi, registeredUser }) => {
-  const response = await usersApi.loginUser({
-    email: registeredUser.email,
-    password: registeredUser.password + '_wrong',
+  test('wrong password', async ({ usersApi, registeredUser }) => {
+    const res = await usersApi.loginUser({ email: registeredUser.email, password: registeredUser.password + '_wrong' });
+    await usersApi.assertInvalidCredentials(res);
   });
 
-  await usersApi.assertInvalidCredentials(response);
-});
-
-test('Login with wrong formatted email', async ({ usersApi, newUserData }) => {
-  const response = await usersApi.loginUser({
-    email: 'wrong-format',
-    password: newUserData.password,
+  test('wrong formatted email', async ({ usersApi, newUserData }) => {
+    const res = await usersApi.loginUser({ email: 'wrong-format', password: newUserData.password });
+    await usersApi.assertInvalidCredentials(res); // <- same contract in this API
   });
-
-  await usersApi.assertInvalidCredentials(response);
 });

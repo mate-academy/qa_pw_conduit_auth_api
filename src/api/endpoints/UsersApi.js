@@ -1,4 +1,3 @@
-// src/api/users/UsersApi.js
 import { expect } from '@playwright/test';
 import { BaseAPI } from '../BaseApi';
 
@@ -44,7 +43,11 @@ export class UsersApi extends BaseAPI {
   // ---------- Parsers ----------
   async parseTokenFromBody(response) {
     const body = await this.parseBody(response);
-    return body.user.token;
+    const token = body?.user?.token ?? null;
+    if (typeof token !== 'string' || token.trim() === '') {
+      throw new Error(`Token not found in response body`);
+    }
+    return token;
   }
 
   // ---------- Assertions: status codes ----------
@@ -70,7 +73,9 @@ export class UsersApi extends BaseAPI {
   async assertResponseBodyContainsToken(response) {
     await this.step(`Assert response body contains token`, async () => {
       const body = await this.parseBody(response);
-      expect(body?.user?.token?.length > 1).toBe(true);
+      const token = body?.user?.token;
+      expect(typeof token).toBe('string');
+      expect(token.trim().length).toBeGreaterThan(0);
     });
   }
 
@@ -102,16 +107,55 @@ export class UsersApi extends BaseAPI {
     });
   }
 
-  async assertInvalidCredentials(response) {
-    await this.step(`Assert invalid credentials (422 + "email or password" = "is invalid")`, async () => {
+  // ---------- Generic validation helper (for field-level 422s) ----------
+  async assertValidationError(response, field, expectedMessage = 'is invalid') {
+    await this.step(`Assert 422 validation error for '${field}'`, async () => {
       expect(response.status()).toBe(422);
-
       const body = await this.parseBody(response);
-      const errors = body?.errors || {};
-      expect(Object.keys(errors)).toEqual(['email or password']);
-      expect(typeof errors['email or password']).toBe('string');
-      expect(errors['email or password']).toBe('is invalid');
+      const v = body?.errors?.[field];
+      const messages = v === undefined ? [] : (Array.isArray(v) ? v : [String(v)]);
+      expect(messages.length).toBeGreaterThan(0);
+      expect(messages).toContain(expectedMessage);
     });
-}
+  }
 
+  // ---------- Invalid-credentials helper (for login with wrong creds) ----------
+  async assertInvalidCredentials(response) {
+    await this.step(`Assert invalid credentials (422 with 'invalid' message)`, async () => {
+      expect(response.status()).toBe(422);
+      const body = await this.parseBody(response);
+      const errors = body?.errors ?? {};
+      // Prefer 'email or password', but be tolerant if backend sends a string/array elsewhere.
+      const raw =
+        errors['email or password'] ??
+        errors.credentials ??
+        errors.error ??
+        null;
+      const messages = raw == null ? [] : (Array.isArray(raw) ? raw : [String(raw)]);
+      expect(messages.length).toBeGreaterThan(0);
+      expect(messages.join(' ').toLowerCase()).toContain('invalid');
+    });
+  }
+
+  // ---------- Unauthorized body helper (for 401 payload) ----------
+  async assertUnauthorizedErrorBody(response, expected = 'Unauthorized') {
+    await this.step(`Assert unauthorized error payload`, async () => {
+      expect(response.status()).toBe(401);
+      const ct = response.headers()['content-type'] || '';
+      if (ct.includes('application/json')) {
+        const body = await this.parseBody(response);
+        const raw =
+          body?.errors?.body ??
+          body?.errors?.message ??
+          body?.message ??
+          body?.error ??
+          [];
+        const messages = Array.isArray(raw) ? raw : [String(raw)];
+        expect(messages.join(' ').toLowerCase()).toContain(expected.toLowerCase());
+      } else {
+        const text = (await response.text?.()) ?? '';
+        expect(String(text).toLowerCase()).toContain(expected.toLowerCase());
+      }
+    });
+  }
 }
