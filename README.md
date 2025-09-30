@@ -9,7 +9,7 @@
 
 ## Description
 
-In this task you need to create test cases for the [Conduit](https://conduit.mate.academy/) users and profile resources. The full list is described in the [documentation](https://documenter.getpostman.com/view/22790481/2sB2j1iY5B)
+In this task you need to create test cases for the [Conduit](https://conduit.mate.academy/) users and profile resources. The full list is described in the [documentation](https://documenter.getpostman.com/view/48909389/2sB3QFQXfE).
 
 ## Preparation
 
