@@ -1,25 +1,29 @@
 import { test } from '../../_fixtures/fixtures';
 
-test.describe('Unauthorized update user scenarios', () => {
-  test(`Update not existing user with expired auth token`, async ({
+test.describe('Update user negative scenarios', () => {
+
+  test(`Update user with an invalid auth token`, async ({
     registeredUser,
     usersApi,
   }) => {
-    registeredUser.token = 'expired_token_or_unknown';
+    const updatedData = { bio: 'Updated bio for testing' };
 
-    const response = await usersApi.updateUser(registeredUser);
+    const response = await usersApi.updateUser(
+      registeredUser.username,
+      updatedData,
+      'invalid_token'
+    );
 
     await usersApi.assertUnauthorizedResponseCode(response);
   });
 
-  test(`Update user with empty auth token`, async ({
-    registeredUser,
-    usersApi,
-  }) => {
-    delete registeredUser.token;
+  test(`Update a non-existing user`, async ({ usersApi }) => {
+    const fakeUser = {
+      username: 'not_existing_user',
+      bio: 'Trying to update non-existing user',
+    };
 
-    const response = await usersApi.updateUser(registeredUser);
-
-    await usersApi.assertUnauthorizedResponseCode(response);
+    const response = await usersApi.updateUser(fakeUser.username, fakeUser);
+    await usersApi.assertNotFoundResponseCode(response);
   });
 });
