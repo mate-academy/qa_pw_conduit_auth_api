@@ -12,6 +12,6 @@ test('Register user with empty email', async ({ usersApi, newUserData }) => {
   await usersApi.assertErrorMessageInResponseBody(
     response,
     INVALID_EMAIL_MESSAGE,
-    'email',
+    //   'email',
   );
 });

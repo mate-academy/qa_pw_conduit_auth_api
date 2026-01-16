@@ -8,6 +8,15 @@ export class UsersApi extends BaseAPI {
     this._headers = { 'content-type': 'application/json' };
   }
 
+  async loginUser(userData) {
+    return await this.step(`Login user`, async () => {
+      return await this.request.post(`${this._endpoint}/login`, {
+        data: { user: userData },
+        headers: this._headers,
+      });
+    });
+  }
+
   async registerNewUser(userData) {
     return await this.step(`Register new user`, async () => {
       return await this.request.post(this._endpoint, {
@@ -50,6 +59,14 @@ export class UsersApi extends BaseAPI {
       const body = await this.parseBody(response);
 
       expect(body.user.email).toBe(email);
+    });
+  }
+
+  async assertEmailHasInCorrectValue(response, email) {
+    await this.step(`Assert response body has incorrect email`, async () => {
+      const body = await this.parseBody(response);
+
+      expect(body.user.email).not.toBe(email);
     });
   }
 
