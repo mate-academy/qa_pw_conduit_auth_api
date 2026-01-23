@@ -1,8 +1,12 @@
 import { test } from '../../_fixtures/fixtures';
+import {
+  TEST_USER_BIO,
+  TEST_USER_IMAGE,
+} from '../../../src/constants/defaultValues';
 
 test(`Update user with bio and image`, async ({ registeredUser, usersApi }) => {
-  registeredUser['bio'] = 'Updated bio for the user.';
-  registeredUser['image'] = 'https://example.com/updateduser.jpg';
+  registeredUser['bio'] = TEST_USER_BIO;
+  registeredUser['image'] = TEST_USER_IMAGE;
 
   const response = await usersApi.updateUser(registeredUser);
 
