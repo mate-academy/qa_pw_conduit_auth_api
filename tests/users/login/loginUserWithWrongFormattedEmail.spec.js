@@ -1,5 +1,5 @@
 import { test } from '../../_fixtures/fixtures';
-import { INVALID_EMAIL_MESSAGE } from '../../../src/constants/authErrorMessages';
+import { INVALID_EMAIL_OR_PASSWORD_MESSAGE } from '../../../src/constants/authErrorMessages';
 
 test('Login with wrong formatted email', async ({ newUserData, usersApi }) => {
   const response = await usersApi.loginUser({
@@ -10,7 +10,7 @@ test('Login with wrong formatted email', async ({ newUserData, usersApi }) => {
   await usersApi.assertUnprocessableEntityResponseCode(response);
   await usersApi.assertErrorMessageInResponseBody(
     response,
-    INVALID_EMAIL_MESSAGE,
-    'email',
+    INVALID_EMAIL_OR_PASSWORD_MESSAGE,
+    'email or password',
   );
 });
