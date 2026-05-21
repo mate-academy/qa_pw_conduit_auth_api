@@ -14,10 +14,9 @@ test.beforeEach(async ({ usersApi, newUserData }) => {
 });
 
 test('Login with wrong password', async ({ newUserData, usersApi }) => {
-  newUserData.password = 'Mathias123!'
   const response = await usersApi.loginUser({
     email: newUserData.email,
-    password: newUserData.password,
+    password: faker.internet.password(),
   });
 
   await usersApi.assertUnprocessableEntityResponseCode(response);
