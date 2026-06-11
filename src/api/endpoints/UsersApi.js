@@ -33,7 +33,7 @@ export class UsersApi extends BaseAPI {
         ...this._headers,
       };
 
-      return await this.request.put('api/user', {
+      return await this.request.put('/api/user', {
         data: { user: userData },
         headers,
       });
