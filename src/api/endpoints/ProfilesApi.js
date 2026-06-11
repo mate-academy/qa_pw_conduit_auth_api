@@ -8,10 +8,15 @@ export class ProfilesApi extends BaseAPI {
     this._headers = { 'content-type': 'application/json' };
   }
 
-  async getProfile(username) {
+  async getProfile(username, authToken = null) {
     return await this.step(`Get profile for a user`, async () => {
+      let headers = {
+        ...this._headers,
+        ...(authToken !== null && { authorization: authToken }),
+      };
+
       return await this.request.get(`${this._endpoint}/${username}`, {
-        headers: this._headers,
+        headers: headers,
       });
     });
   }
