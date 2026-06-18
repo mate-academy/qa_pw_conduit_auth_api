@@ -30,6 +30,14 @@ export class UsersApi extends BaseAPI {
       });
     });
   }
+  async login(userData) {
+    return await this.step(`Login`, async () => {
+      return await this.request.post(this._endpoint + '/login', {
+        data: { user: userData },
+        headers: this._headers,
+      });
+    });
+  }
 
   async parseTokenFromBody(response) {
     const body = await this.parseBody(response);
