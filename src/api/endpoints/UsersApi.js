@@ -5,6 +5,7 @@ export class UsersApi extends BaseAPI {
   constructor(request) {
     super(request);
     this._endpoint = '/api/users';
+    this._updateEndpoint = '/api/user';
     this._headers = { 'content-type': 'application/json' };
   }
 
@@ -17,6 +18,16 @@ export class UsersApi extends BaseAPI {
     });
   }
 
+  async loginUser(userData){
+    return await this.step(`Login user`,async()=> {
+      return await this.request.post(`${this._endpoint}/login`, {
+        data: { user: userData },
+        headers: this._headers,
+      });
+    });
+
+  }
+
   async updateUser(userData) {
     return await this.step(`Update existing user`, async () => {
       let headers = {
@@ -24,7 +35,7 @@ export class UsersApi extends BaseAPI {
         ...this._headers,
       };
 
-      return await this.request.put('api/user', {
+      return await this.request.put(`${this._updateEndpoint}`, {
         data: { user: userData },
         headers,
       });
