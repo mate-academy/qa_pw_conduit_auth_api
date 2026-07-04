@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { testStep } from '../common/helpers/pw';
-import { SUCCESS_CODE, UNPROCESSABLE_ENTITY } from '../constants/responceCodes';
+import { SUCCESS_CODE, UNPROCESSABLE_ENTITY, NOT_FOUND_CODE, UNAUTHORIZED_CODE } from '../constants/responceCodes';
 
 export class BaseAPI {
   _endpoint;
@@ -38,8 +38,17 @@ export class BaseAPI {
     await this.assertResponseCode(response, SUCCESS_CODE);
   }
 
+
   async assertUnprocessableEntityResponseCode(response) {
     await this.assertResponseCode(response, UNPROCESSABLE_ENTITY);
+  }
+
+  async assertNotFoundResponseCode(response) {
+    await this.assertResponseCode(response, NOT_FOUND_CODE);
+  }
+
+  async assertUnauthorizedResponseCode(response) {
+    await this.assertResponseCode(response, UNAUTHORIZED_CODE);
   }
 
   async assertBodyIsNotEmpty(response) {
