@@ -16,6 +16,19 @@ export class ProfilesApi extends BaseAPI {
     });
   }
 
+  async getProfileWithoutAuthHeader(username) {
+    return await this.step(`Get profile without auth header`, async () => {
+      let headers = {
+        authorization: ``,
+        ...this._headers,
+      };
+
+      return await this.request.get(`${this._endpoint}/${username}`, {
+        headers: headers,
+      });
+    });
+  }
+
   async assertUsernameHasCorrectValue(response, username) {
     await this.step(`Assert response body has correct username`, async () => {
       const body = await this.parseBody(response);

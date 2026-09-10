@@ -24,7 +24,7 @@ export class UsersApi extends BaseAPI {
         ...this._headers,
       };
 
-      return await this.request.put('api/user', {
+      return await this.request.put('/api/user', {
         data: { user: userData },
         headers,
       });
@@ -35,30 +35,6 @@ export class UsersApi extends BaseAPI {
     const body = await this.parseBody(response);
 
     return body.user.token;
-  }
-
-  async assertResponseBodyContainsToken(response) {
-    await this.step(`Assert response body contains token`, async () => {
-      const body = await this.parseBody(response);
-
-      expect(body.user.token.length > 1).toBe(true);
-    });
-  }
-
-  async assertEmailHasCorrectValue(response, email) {
-    await this.step(`Assert response body has correct email`, async () => {
-      const body = await this.parseBody(response);
-
-      expect(body.user.email).toBe(email);
-    });
-  }
-
-  async assertUsernameHasCorrectValue(response, username) {
-    await this.step(`Assert response body has correct username`, async () => {
-      const body = await this.parseBody(response);
-
-      expect(body.user.username).toBe(username);
-    });
   }
 
   async assertImageHasCorrectValue(response, image) {
@@ -77,6 +53,22 @@ export class UsersApi extends BaseAPI {
       const body = await this.parseBody(response);
 
       expect(body.user.bio).toBe(bio);
+    });
+  }
+
+  async assertUsernameHasCorrectValue(response, username) {
+    await this.step(`Assert response body has correct username`, async () => {
+      const body = await this.parseBody(response);
+
+      expect(body.user.username).toBe(username);
+    });
+  }
+
+  async assertEmailHasCorrectValue(response, email) {
+    await this.step(`Assert response body has correct email`, async () => {
+      const body = await this.parseBody(response);
+
+      expect(body.user.email).toBe(email);
     });
   }
 }
