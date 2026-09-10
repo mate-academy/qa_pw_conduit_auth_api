@@ -4,9 +4,9 @@ test(`Read profile of not existing user`, async ({
   registeredUser,
   profilesApi,
 }) => {
-  const response = await profilesApi.getProfile(
-    (registeredUser.username = 'notExisting'),
-  );
+  const notExistingUsername = (registeredUser.username = 'notExisting');
+
+  const response = await profilesApi.getProfile(notExistingUsername);
 
   await profilesApi.assertNotFoundResponseCode(response);
 });
