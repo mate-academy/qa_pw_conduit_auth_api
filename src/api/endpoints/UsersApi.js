@@ -24,7 +24,7 @@ export class UsersApi extends BaseAPI {
         ...this._headers,
       };
 
-      return await this.request.put('api/user', {
+      return await this.request.put('/api/user', {
         data: { user: userData },
         headers,
       });
@@ -77,6 +77,20 @@ export class UsersApi extends BaseAPI {
       const body = await this.parseBody(response);
 
       expect(body.user.bio).toBe(bio);
+    });
+  }
+
+  async loginUser(email, password) {
+    return await this.step(`Login user`, async () => {
+      return await this.request.post(`${this._endpoint}/login`, {
+        data: {
+          user: {
+            email,
+            password,
+          },
+        },
+        headers: this._headers,
+      });
     });
   }
 }
