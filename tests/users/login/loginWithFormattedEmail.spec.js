@@ -6,7 +6,7 @@ test.beforeEach(async ({ usersApi, newUserData }) => {
   await usersApi.registerNewUser(newUserData);
 });
 
-test(`Login with non existing email`, async ({ usersApi, newUserData }) => {
+test(`Login with wrong formatted email`, async ({ usersApi, newUserData }) => {
   const response = await usersApi.loginUser(
     invalidEmailFormat,
     newUserData.password,
