@@ -79,4 +79,18 @@ export class UsersApi extends BaseAPI {
       expect(body.user.bio).toBe(bio);
     });
   }
+
+  async loginUser(email, password) {
+    return await this.step(`Login user`, async () => {
+      return await this.request.post(`${this._endpoint}/login`, {
+        data: {
+          user: {
+            email,
+            password,
+          },
+        },
+        headers: this._headers,
+      });
+    });
+  }
 }
