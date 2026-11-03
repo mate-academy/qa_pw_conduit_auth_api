@@ -17,16 +17,36 @@ export class UsersApi extends BaseAPI {
     });
   }
 
-  async updateUser(userData) {
-    return await this.step(`Update existing user`, async () => {
-      let headers = {
-        authorization: `Token ${userData.token}`,
-        ...this._headers,
-      };
+  async loginUser(userData) {
+    return await this.step(`Login for registered user`, async () => {
+      return await this.request.post(`${this._endpoint}/login`, {
+        data: {
+          user: {
+            email: userData.email,
+            password: userData.password,
+          },
+        },
+        headers: this._headers,
+      });
+    });
+  }
 
-      return await this.request.put('api/user', {
+  async assertBodyHasToken(response) {
+    await this.step(`Assert response body has token`, async () => {
+      const body = await this.parseBody(response);
+
+      expect(body.user.token).toBeTruthy();
+    });
+  }
+
+  async updateUser(token, userData) {
+    return await this.step(`Update existing user`, async () => {
+      return await this.request.put('/api/user', {
         data: { user: userData },
-        headers,
+        headers: {
+          authorization: `Token ${token}`,
+          ...this._headers,
+        },
       });
     });
   }

@@ -27,4 +27,10 @@ export const test = base.extend<{
 
     await use(newUserData);
   },
+
+  updateUserData: async ({ logger }, use) => {
+    const userData = generateNewUserData(logger);
+
+    await use(userData);
+  },
 });
