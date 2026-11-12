@@ -1,10 +1,29 @@
 import { test } from '../../_fixtures/fixtures';
 
-test('Update user with invalid token', async ({ usersApi, newUserData }) => {
+test('Update user with not existing username', async ({
+  usersApi,
+  profilesApi,
+  registeredUser,
+}) => {
+  const notExistingUsername = `${registeredUser.username}_not_existing`;
+
+  const profileBefore = await profilesApi.getProfile(notExistingUsername);
+
+  await profilesApi.assertResponseCode(profileBefore, 404);
+
   const response = await usersApi.updateUser({
-    ...newUserData,
-    token: 'invalid-token',
+    ...registeredUser,
+    username: notExistingUsername,
   });
 
-  await usersApi.assertResponseCode(response, 401);
-}); 
+  await usersApi.assertSuccessResponseCode(response);
+
+  await usersApi.assertUsernameHasCorrectValue(
+    response,
+    notExistingUsername,
+  );
+
+  const profileAfter = await profilesApi.getProfile(notExistingUsername);
+
+  await profilesApi.assertSuccessResponseCode(profileAfter);
+});
