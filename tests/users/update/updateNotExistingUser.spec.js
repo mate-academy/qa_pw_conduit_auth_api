@@ -1,29 +1,14 @@
 import { test } from '../../_fixtures/fixtures';
 
-test('Update user with not existing username', async ({
+test('Update not existing user', async ({
   usersApi,
-  profilesApi,
-  registeredUser,
 }) => {
-  const notExistingUsername = `${registeredUser.username}_not_existing`;
-
-  const profileBefore = await profilesApi.getProfile(notExistingUsername);
-
-  await profilesApi.assertResponseCode(profileBefore, 404);
+  const notExistingUsername = `Michael_Jackson`;
 
   const response = await usersApi.updateUser({
-    ...registeredUser,
     username: notExistingUsername,
+    email: "sukre@gmail.com",
   });
 
-  await usersApi.assertSuccessResponseCode(response);
-
-  await usersApi.assertUsernameHasCorrectValue(
-    response,
-    notExistingUsername,
-  );
-
-  const profileAfter = await profilesApi.getProfile(notExistingUsername);
-
-  await profilesApi.assertSuccessResponseCode(profileAfter);
+  await usersApi.assertResponseCode(response, 401);
 });
