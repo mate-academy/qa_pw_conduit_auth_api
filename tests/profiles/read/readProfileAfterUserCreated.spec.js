@@ -1,7 +1,6 @@
 import { test } from '../../_fixtures/fixtures';
-import { DEFAULT_IMAGE_LINK } from '../../../src/constants/defaultValues';
 
-test(`Read profile after user created`, async ({
+test('Read profile after user created', async ({
   registeredUser,
   profilesApi,
 }) => {
@@ -13,7 +12,13 @@ test(`Read profile after user created`, async ({
     response,
     registeredUser.username,
   );
+
   await profilesApi.assertBioHasCorrectValue(response, null);
-  await profilesApi.assertImageHasCorrectValue(response, DEFAULT_IMAGE_LINK);
+
+  await profilesApi.assertImageHasCorrectValue(
+    response,
+    '/images/smiley-cyrus.jpg',
+  );
+
   await profilesApi.assertFollowingHasValueFalse(response);
 });
